@@ -5,7 +5,7 @@
   background-color: #fff;
 
   &:hover {
-    box-shadow: 0 4px 10px #e8e8e8;
+      box-shadow: 0 4px 10px #e8e8e8;
   }
 }
 
@@ -13,13 +13,13 @@
   display: flex;
 
   .left {
-    flex: 1;
+      flex: 1;
   }
 
   .right {
-    flex: 1;
-    text-align: right;
-    font-size: 12px;
+      flex: 1;
+      text-align: right;
+      font-size: 12px;
   }
 }
 
@@ -27,10 +27,15 @@
   display: flex;
 
   .left {
-    flex: 1;
+      flex: 1;
   }
+
   .right {
-    flex: 1;
-    text-align: right;
+      flex: 1;
+      text-align: right;
+
+      button {
+          color: #999
+      }
   }
 }

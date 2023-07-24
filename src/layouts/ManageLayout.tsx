@@ -12,7 +12,6 @@ const ManageLayout: FC = () => {
     <>
       <div className={styles.container}>
         <div className={styles.left}>
-          <p>ManageLayout left</p>
           <Space direction="vertical">
             <Button type="primary" size="large" icon={<PlusOutlined />}>
               创建问卷
