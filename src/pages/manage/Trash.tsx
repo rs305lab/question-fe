@@ -3,8 +3,9 @@ import { useTitle } from 'ahooks'
 // import QuestionCard from '../../components/QuestionCard'
 import ListSearch from '../../components/ListSearch'
 import styles from './common.module.scss'
-import { Typography, Empty, Tag, Table, Button, Space, Modal, message } from 'antd'
+import { Typography, Empty, Tag, Table, Button, Space, Modal, message, Spin } from 'antd'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
+import useLoadQuestionListData from '../../hooks/useLoadQuestionListData'
 
 const { Title } = Typography
 const { confirm } = Modal
@@ -39,53 +40,12 @@ const tableColumns = [
   },
 ]
 
-const rawQuestionList = [
-  {
-    _id: 'q1',
-    title: '问卷1',
-    isPublished: true,
-    isStar: false,
-    answerCount: 5,
-    createdAt: '7月21日 09:21',
-  },
-  {
-    _id: 'q2',
-    title: '问卷2',
-    isPublished: false,
-    isStar: false,
-    answerCount: 5,
-    createdAt: '7月21日 10:23',
-  },
-  {
-    _id: 'q3',
-    title: '问卷3',
-    isPublished: true,
-    isStar: true,
-    answerCount: 5,
-    createdAt: '7月21日 17:21',
-  },
-  {
-    _id: 'q4',
-    title: '问卷4',
-    isPublished: false,
-    isStar: true,
-    answerCount: 5,
-    createdAt: '7月22日 9:21',
-  },
-  {
-    _id: 'q5',
-    title: '问卷5',
-    isPublished: true,
-    isStar: false,
-    answerCount: 5,
-    createdAt: '7月22日 9:37',
-  },
-]
-
 const Trash: FC = () => {
   useTitle('小林问卷 - 回收站')
 
-  const [questionList] = useState(rawQuestionList)
+  const { loading, data = {} } = useLoadQuestionListData({ isDeleted: true })
+  const { list = [], total } = data
+
   const [selectedIds, setSelectedIds] = useState<string[]>([])
 
   function del() {
@@ -111,7 +71,7 @@ const Trash: FC = () => {
         </Button>
       </Space>
       <Table
-        dataSource={questionList}
+        dataSource={list}
         columns={tableColumns}
         pagination={false}
         rowKey={q => q._id}
@@ -136,8 +96,13 @@ const Trash: FC = () => {
         </div>
       </div>
       <div className={styles.content}>
-        {questionList.length === 0 && <Empty description="暂无数据" />}
-        {questionList.length > 0 && TableElem}
+        {loading && (
+          <div style={{ textAlign: 'center' }}>
+            <Spin />
+          </div>
+        )}
+        {!loading && list.length === 0 && <Empty description="暂无数据" />}
+        {!loading && list.length > 0 && TableElem}
       </div>
       <div className={styles.footer}>分页</div>
     </>

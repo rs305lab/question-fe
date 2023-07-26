@@ -1,59 +1,40 @@
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 import { useTitle } from 'ahooks'
 import QuestionCard from '../../components/QuestionCard'
 import ListSearch from '../../components/ListSearch'
 import styles from './common.module.scss'
-import { Typography, Empty } from 'antd'
+import { Typography, Empty, Spin } from 'antd'
+import useLoadQuestionListData from '../../hooks/useLoadQuestionListData'
 
+// type QuestionListType = [
+//   {
+//     _id?: string
+//     title?: string
+//     isPublished?: boolean
+//     isStar?: boolean
+//     answerCount?: number
+//     createdAt?: string
+//     isDeleted?: boolean
+//   },
+// ]
 const { Title } = Typography
-
-const rawQuestionList = [
-  {
-    _id: 'q1',
-    title: '问卷1',
-    isPublished: true,
-    isStar: false,
-    answerCount: 5,
-    createdAt: '7月21日 09:21',
-  },
-  {
-    _id: 'q2',
-    title: '问卷2',
-    isPublished: false,
-    isStar: false,
-    answerCount: 5,
-    createdAt: '7月21日 10:23',
-  },
-  {
-    _id: 'q3',
-    title: '问卷3',
-    isPublished: true,
-    isStar: true,
-    answerCount: 5,
-    createdAt: '7月21日 17:21',
-  },
-  {
-    _id: 'q4',
-    title: '问卷4',
-    isPublished: false,
-    isStar: true,
-    answerCount: 5,
-    createdAt: '7月22日 9:21',
-  },
-  {
-    _id: 'q5',
-    title: '问卷5',
-    isPublished: true,
-    isStar: false,
-    answerCount: 5,
-    createdAt: '7月22日 9:37',
-  },
-]
 
 const List: FC = () => {
   useTitle('小林问卷 - 我的问卷')
 
-  const [questionList] = useState(rawQuestionList)
+  const { loading, data = {} } = useLoadQuestionListData()
+  const { list = [], total } = data
+  // const [questionList, setQuestionList] = useState([{}])
+  // const [loading, setLoading] = useState(true)
+  // useEffect(() => {
+  //   async function load() {
+  //     const data = await getQuestionListService()
+  //     const { list, total } = data || {}
+  //     setQuestionList(list)
+  //     setLoading(false)
+  //   }
+  //   load()
+  // }, [])
 
   return (
     <>
@@ -66,9 +47,18 @@ const List: FC = () => {
         </div>
       </div>
       <div className={styles.content}>
-        {questionList.length === 0 && <Empty description="暂无数据" />}
-        {questionList.length > 0 &&
-          questionList.map(q => <QuestionCard key={q._id} {...q}></QuestionCard>)}
+        {loading && (
+          <div style={{ textAlign: 'center' }}>
+            <Spin />
+          </div>
+        )}
+        {!loading && list.length === 0 && <Empty description="暂无数据" />}
+        {!loading &&
+          list.length > 0 &&
+          list.map((q: any) => {
+            const { _id } = q
+            return <QuestionCard key={_id} {...q} />
+          })}
       </div>
       <div className={styles.footer}>loadMore 上划加载更多</div>
     </>
