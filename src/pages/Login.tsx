@@ -1,9 +1,12 @@
 import React, { FC, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { Space, Typography, Form, Input, Checkbox, Button } from 'antd'
+import { Link, useNavigate } from 'react-router-dom'
+import { Space, Typography, Form, Input, Checkbox, Button, message } from 'antd'
 import { UserAddOutlined } from '@ant-design/icons'
 import styles from './Login.module.scss'
-import { REGISTER_PATHNAME } from '../router/router'
+import { MANAGE_INDEX_PATHNAME, REGISTER_PATHNAME } from '../router/router'
+import { useRequest } from 'ahooks'
+import { loginService } from '../services/user'
+import { setToken } from '../utils/user-token'
 
 const { Title } = Typography
 
@@ -26,15 +29,35 @@ function getUserInfoFromStorage() {
 }
 
 const Login: FC = () => {
+  const nav = useNavigate()
+
   function onFinish(values: any) {
-    console.log(values)
     const { username, password, remember } = values || {}
     if (remember) {
       rememberUser(username, password)
     } else {
       deleteUserFormStorage()
     }
+    run(username, password)
   }
+
+  const { run } = useRequest(
+    async (username: string, password: string) => {
+      const data = await loginService(username, password)
+      return data
+    },
+    {
+      manual: true,
+      onSuccess: result => {
+        const { token = '' } = result
+        setToken(token)
+        message.success('登录成功')
+        nav({
+          pathname: MANAGE_INDEX_PATHNAME,
+        })
+      },
+    }
+  )
 
   const [form] = Form.useForm()
   useEffect(() => {

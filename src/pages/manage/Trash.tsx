@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react'
-import { useTitle } from 'ahooks'
+import { useRequest, useTitle } from 'ahooks'
 // import QuestionCard from '../../components/QuestionCard'
 import ListPage from '../../components/ListPage'
 import ListSearch from '../../components/ListSearch'
@@ -7,6 +7,7 @@ import styles from './common.module.scss'
 import { Typography, Empty, Tag, Table, Button, Space, Modal, message, Spin } from 'antd'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
 import useLoadQuestionListData from '../../hooks/useLoadQuestionListData'
+import { deleteQuestionsService, updateQuestionService } from '../../services/question'
 
 const { Title } = Typography
 const { confirm } = Modal
@@ -44,7 +45,7 @@ const tableColumns = [
 const Trash: FC = () => {
   useTitle('小林问卷 - 回收站')
 
-  const { loading, data = {} } = useLoadQuestionListData({ isDeleted: true })
+  const { loading, data = {}, refresh } = useLoadQuestionListData({ isDeleted: true })
   const { list = [], total } = data
 
   const [selectedIds, setSelectedIds] = useState<string[]>([])
@@ -56,18 +57,58 @@ const Trash: FC = () => {
       content: '确定删除吗，一旦删除不可恢复',
       icon: <ExclamationCircleOutlined />,
       onOk: () => {
-        message.success(`${JSON.stringify(selectedIds)}删除成功`)
+        deleteQuestions()
       },
     })
   }
+  const { run: deleteQuestions, loading: deleteQuestionsLoading } = useRequest(
+    async () => {
+      const data = await deleteQuestionsService(selectedIds)
+      return data
+    },
+    {
+      manual: true,
+      onSuccess: () => {
+        message.success(`${JSON.stringify(selectedIds)}删除成功`)
+        setSelectedIds([])
+        refresh()
+      },
+    }
+  )
+
+  // 恢复
+  const { run: recover, loading: recoverLoading } = useRequest(
+    async () => {
+      for await (const id of selectedIds) {
+        await updateQuestionService(id, { isDeleted: false })
+      }
+    },
+    {
+      manual: true,
+      // debounceWait: 500, // 防抖
+      onSuccess() {
+        message.success('恢复成功')
+        setSelectedIds([])
+        refresh() // 手动刷新列表
+      },
+    }
+  )
 
   const TableElem = (
     <>
       <Space style={{ marginBottom: '16px' }}>
-        <Button type="primary" disabled={selectedIds.length === 0}>
+        <Button
+          type="primary"
+          disabled={selectedIds.length === 0 || deleteQuestionsLoading || recoverLoading}
+          onClick={recover}
+        >
           恢复
         </Button>
-        <Button disabled={selectedIds.length === 0} danger onClick={del}>
+        <Button
+          disabled={selectedIds.length === 0 || deleteQuestionsLoading || recoverLoading}
+          danger
+          onClick={del}
+        >
           彻底删除
         </Button>
       </Space>

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { useDebounceFn, useRequest, useTitle } from 'ahooks'
 import QuestionCard from '../../components/QuestionCard'
 import ListSearch from '../../components/ListSearch'
@@ -32,7 +32,6 @@ const List: FC = () => {
 
   const [searchParams] = useSearchParams() // url 参数，虽然没有 page pageSize，但是有 keyword
   const keyword = searchParams.get(LIST_SEARCH_PARAM_KEY) || ''
-  console.log(searchParams)
 
   // keyword 变化时，重置信息
   useEffect(() => {
@@ -93,13 +92,12 @@ const List: FC = () => {
     }
   }, [searchParams, haveMoreData])
 
-  const LoadMoreContentElem = () => {
+  const LoadMoreContentElem = useMemo(() => {
     if (!started || loading) return <Spin />
     if (total === 0) return <Empty description="暂无数据" />
     if (!haveMoreData) return <span>没有更多了...</span>
     return <span>开始加载下一页</span>
-  }
-
+  }, [started, loading, haveMoreData])
   return (
     <>
       <div className={styles.header}>
@@ -118,7 +116,7 @@ const List: FC = () => {
           })}
       </div>
       <div className={styles.footer} ref={containerRef}>
-        {LoadMoreContentElem()}
+        {LoadMoreContentElem}
       </div>
     </>
   )
