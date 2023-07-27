@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react'
 import { useTitle } from 'ahooks'
 // import QuestionCard from '../../components/QuestionCard'
+import ListPage from '../../components/ListPage'
 import ListSearch from '../../components/ListSearch'
 import styles from './common.module.scss'
 import { Typography, Empty, Tag, Table, Button, Space, Modal, message, Spin } from 'antd'
@@ -104,7 +105,9 @@ const Trash: FC = () => {
         {!loading && list.length === 0 && <Empty description="暂无数据" />}
         {!loading && list.length > 0 && TableElem}
       </div>
-      <div className={styles.footer}>分页</div>
+      <div className={styles.footer}>
+        <ListPage total={total} />
+      </div>
     </>
   )
 }
