@@ -1,3 +1,8 @@
+/**
+ * @description 获取单个问卷信息
+ * @author rs305
+ */
+
 import { useParams } from 'react-router-dom'
 import { getQuestionService } from '../services/question'
 import { useRequest } from 'ahooks'
