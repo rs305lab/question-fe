@@ -2,12 +2,12 @@ import React, { FC } from 'react'
 import useLoadQuestionData from '../../../hooks/useLoadQuestionData'
 
 const Stat: FC = () => {
-  const { loading, data } = useLoadQuestionData()
+  const { loading } = useLoadQuestionData()
 
   return (
     <>
       <p>Stat</p>
-      <div>{loading ? <p>loading</p> : <p>{JSON.stringify(data)}</p>}</div>
+      {/* <div>{loading ? <p>loading</p> : <p>{JSON.stringify(data)}</p>}</div> */}
     </>
   )
 }
