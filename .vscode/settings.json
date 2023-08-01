@@ -19,6 +19,7 @@
     "ahooks",
     "Appstore",
     "carco",
+    "clonedeep",
     "craco",
     "erron",
     "immer",
