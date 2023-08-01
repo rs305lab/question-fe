@@ -11,6 +11,7 @@ import useGetComponentInfo from '../../../hooks/useGetComponentInfo'
 import { ComponentInfoType, changeSelectedId } from '../../../store/componentsReducer'
 import { useDispatch } from 'react-redux'
 import classNames from 'classnames'
+import useBindCanvasKeyPress from '../../../hooks/useBindCanvasKeyPress'
 
 type PropsType = {
   loading: boolean
@@ -28,6 +29,8 @@ function getComponent(componentInfo: ComponentInfoType) {
 }
 
 const EditCanvas: FC<PropsType> = ({ loading }) => {
+  useBindCanvasKeyPress()
+
   const { componentList, selectedId } = useGetComponentInfo()
   const dispatch = useDispatch()
 

@@ -21,9 +21,11 @@
     "carco",
     "clonedeep",
     "craco",
+    "downarrow",
     "erron",
     "immer",
     "Popconfirm",
-    "reduxjs"
+    "reduxjs",
+    "uparrow"
   ]
 }

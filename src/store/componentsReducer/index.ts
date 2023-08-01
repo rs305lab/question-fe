@@ -114,6 +114,24 @@ export const componentsSlice = createSlice({
         insertNewComponent(state, copiedComponent)
       }
     },
+    selectPrevComponent: (state: ComponentsStateType) => {
+      const { componentList, selectedId } = state
+      const selectedIndex = componentList.findIndex(c => c.fe_id === selectedId)
+
+      if (selectedIndex < 0) return
+      if (selectedIndex <= 0) return
+
+      state.selectedId = componentList[selectedIndex - 1].fe_id
+    },
+    selectNextComponent: (state: ComponentsStateType) => {
+      const { componentList, selectedId } = state
+      const selectedIndex = componentList.findIndex(c => c.fe_id === selectedId)
+
+      if (selectedIndex < 0) return
+      if (selectedIndex + 1 === componentList.length) return
+
+      state.selectedId = componentList[selectedIndex + 1].fe_id
+    },
   },
 })
 
@@ -128,4 +146,6 @@ export const {
   toggleComponentLocked,
   copySelectedComponent,
   pasteCopiedComponent,
+  selectPrevComponent,
+  selectNextComponent,
 } = componentsSlice.actions
