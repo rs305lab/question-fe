@@ -4,7 +4,7 @@ import { Typography } from 'antd'
 
 const { Title } = Typography
 
-const QuestionTitle: FC<QuestionTitlePropsType> = (props: QuestionTitlePropsType) => {
+const Component: FC<QuestionTitlePropsType> = (props: QuestionTitlePropsType) => {
   const { level = 1, text = '', isCenter = false } = { ...QuestionTitleDefaultProps, ...props }
 
   const genFontSize = (level: number): string => {
@@ -29,4 +29,4 @@ const QuestionTitle: FC<QuestionTitlePropsType> = (props: QuestionTitlePropsType
     </Title>
   )
 }
-export default QuestionTitle
+export default Component

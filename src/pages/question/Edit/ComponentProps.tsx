@@ -9,6 +9,7 @@ const NoProp: FC = () => {
 }
 
 const ComponentProps: FC = () => {
+  const dispatch = useDispatch()
   const { selectedComponent } = useGetComponentInfo()
   if (selectedComponent == null) return <NoProp />
 
@@ -17,7 +18,6 @@ const ComponentProps: FC = () => {
 
   if (componentConf == null) return <NoProp />
 
-  const dispatch = useDispatch()
   function changeProps(newProps: ComponentPropsType) {
     if (selectedComponent == null) return
     const { fe_id } = selectedComponent

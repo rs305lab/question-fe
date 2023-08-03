@@ -25,8 +25,10 @@ const EditHeader: FC = () => {
           <EditToolbar />
         </div>
         <div className={styles.right}>
-          <Button>保存</Button>
-          <Button type="primary">发布</Button>
+          <Space>
+            <Button>保存</Button>
+            <Button type="primary">发布</Button>
+          </Space>
         </div>
       </div>
     </div>

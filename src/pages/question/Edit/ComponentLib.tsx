@@ -8,30 +8,30 @@ import { nanoid } from '@reduxjs/toolkit'
 
 const { Title } = Typography
 
-function genComponent(c: ComponentConfType) {
-  const { title, type, Component, defaultProps } = c
+const ComponentLib: FC = () => {
   const dispatch = useDispatch()
 
-  const handleClick = () => {
-    dispatch(
-      addComponent({
-        fe_id: nanoid(), // 前端生成的 id
-        title,
-        type,
-        props: defaultProps,
-      })
+  function genComponent(c: ComponentConfType) {
+    const { title, type, Component, defaultProps } = c
+    const handleClick = () => {
+      dispatch(
+        addComponent({
+          fe_id: nanoid(), // 前端生成的 id
+          title,
+          type,
+          props: defaultProps,
+        })
+      )
+    }
+    return (
+      <div key={type} className={styles.wrapper} onClick={handleClick}>
+        <div className={styles.component}>
+          <Component />
+        </div>
+      </div>
     )
   }
-  return (
-    <div className={styles.wrapper} onClick={handleClick}>
-      <div className={styles.component}>
-        <Component />
-      </div>
-    </div>
-  )
-}
 
-const ComponentLib: FC = () => {
   return (
     <>
       {componentConfGroup.map((group, index) => {
@@ -43,12 +43,7 @@ const ComponentLib: FC = () => {
               {groupName}
             </Title>
             {/* 缺少 key，为什么需要循环 */}
-            <div>
-              {components.map(c => {
-                console.log(c)
-                return genComponent(c)
-              })}
-            </div>
+            <div>{components.map(c => genComponent(c))}</div>
           </div>
         )
       })}

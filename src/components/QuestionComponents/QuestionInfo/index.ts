@@ -1,19 +1,19 @@
 /**
- * @description 问卷标题组件
+ * @description 问卷信息组件
  * @author rs305
  */
 
 import Component from './Component'
-import { QuestionTitleDefaultProps } from './interface'
+import { QuestionInfoDefaultProps } from './interface'
 import PropComponent from './PropComponent'
 
 export * from './interface'
 
 // 组件配置
 export default {
-  title: '标题',
-  type: 'questionTitle',
+  title: '问卷信息',
+  type: 'questionInfo',
   Component,
   PropComponent,
-  defaultProps: QuestionTitleDefaultProps,
+  defaultProps: QuestionInfoDefaultProps,
 }

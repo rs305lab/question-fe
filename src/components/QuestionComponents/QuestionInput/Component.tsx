@@ -4,12 +4,12 @@ import { QuestionInputPropsType, QuestionInputDefaultProps } from './interface'
 
 const { Paragraph } = Typography
 
-const QuestionInput: FC<QuestionInputPropsType> = (props: QuestionInputPropsType) => {
+const Component: FC<QuestionInputPropsType> = (props: QuestionInputPropsType) => {
   const { title, placeholder } = { ...QuestionInputDefaultProps, ...props }
 
   return (
     <div>
-      <Paragraph>{title}</Paragraph>
+      <Paragraph strong>{title}</Paragraph>
       <div>
         <Input placeholder={placeholder}></Input>
       </div>
@@ -17,4 +17,4 @@ const QuestionInput: FC<QuestionInputPropsType> = (props: QuestionInputPropsType
   )
 }
 
-export default QuestionInput
+export default Component
