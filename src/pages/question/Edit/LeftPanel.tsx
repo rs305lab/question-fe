@@ -2,6 +2,7 @@ import React, { FC } from 'react'
 import { Tabs } from 'antd'
 import { AppstoreAddOutlined, BarsOutlined } from '@ant-design/icons'
 
+import Layers from './Layers'
 import ComponentLib from './ComponentLib'
 
 const LeftPanel: FC = () => {
@@ -11,6 +12,7 @@ const LeftPanel: FC = () => {
       label: (
         <span>
           <AppstoreAddOutlined />
+          组件库
         </span>
       ),
       children: <ComponentLib />,
@@ -23,7 +25,7 @@ const LeftPanel: FC = () => {
           图层
         </span>
       ),
-      children: <div>图层</div>,
+      children: <Layers />,
     },
   ]
 

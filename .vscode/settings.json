@@ -26,6 +26,7 @@
     "immer",
     "Popconfirm",
     "reduxjs",
+    "undoable",
     "uparrow"
   ]
 }

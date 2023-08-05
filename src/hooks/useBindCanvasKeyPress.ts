@@ -7,6 +7,7 @@ import {
   selectNextComponent,
   selectPrevComponent,
 } from '../store/componentsReducer'
+import { ActionCreators as UndoActionCreators } from 'redux-undo'
 
 /**
  * 判断是否 focus 到 input
@@ -16,6 +17,7 @@ function isActiveElementValid() {
 
   // 光标没有 focus 到 input
   if (activeElem === document.body) return true
+  if (activeElem?.matches('div[role="button"]')) return true
 
   return false
 }
@@ -24,26 +26,51 @@ const useBindCanvasKeyPress = () => {
   const dispatch = useDispatch()
 
   useKeyPress(['delete', 'Backspace'], () => {
-    if (isActiveElementValid()) dispatch(removeSelectedComponent())
+    if (!isActiveElementValid()) return
+    dispatch(removeSelectedComponent())
   })
 
   useKeyPress(['ctrl.c'], () => {
-    if (isActiveElementValid()) dispatch(copySelectedComponent())
+    if (!isActiveElementValid()) return
+    dispatch(copySelectedComponent())
   })
 
   useKeyPress(['ctrl.v'], () => {
-    if (isActiveElementValid()) dispatch(pasteCopiedComponent())
+    if (!isActiveElementValid()) return
+    dispatch(pasteCopiedComponent())
   })
 
   useKeyPress(['uparrow'], () => {
-    if (isActiveElementValid()) dispatch(selectPrevComponent())
+    if (!isActiveElementValid()) return
+    dispatch(selectPrevComponent())
   })
 
   useKeyPress(['downarrow'], () => {
-    if (isActiveElementValid()) dispatch(selectNextComponent())
+    if (!isActiveElementValid()) return
+    dispatch(selectNextComponent())
   })
 
-  //TODO 撤销重做
+  useKeyPress(
+    ['ctrl.z', 'meta.z'],
+    () => {
+      if (!isActiveElementValid()) return
+      dispatch(UndoActionCreators.undo())
+    },
+    {
+      exactMatch: true, // 严格匹配
+    }
+  )
+
+  useKeyPress(
+    ['ctrl.shift.z', 'meta.shift.z'],
+    () => {
+      if (!isActiveElementValid()) return
+      dispatch(UndoActionCreators.redo())
+    },
+    {
+      exactMatch: true, // 严格匹配
+    }
+  )
 }
 
 export default useBindCanvasKeyPress
